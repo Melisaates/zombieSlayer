@@ -11,8 +11,8 @@ Açıkça çok fazla zombi istemiyorsunuz. Odada herhangi bir anda 100'den fazla
 
 Projenin amacı, ölden önce 100 zombiyi öldürebileceğiniz en yüksek kapı sayısını bulmak için kod yazmaktır.
 
-Kullanılan Sınıflar
-*********
+#Kullanılan Sınıflar
+
 
 ZombieCounter:
 --
