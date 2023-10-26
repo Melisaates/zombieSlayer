@@ -25,7 +25,6 @@ This class has methods to keep track of the number of zombies in the room and th
 
 ### DoorMan:
 This class should have a ZombieCounter object to track the number of zombies. It has a constructor as follows:
-```java
 public DoorMan(ZombieCounter zombieCounter) { }
 
 
@@ -33,7 +32,7 @@ Each DoorMan thread lets a zombie in every 2ms (by calling the relevant method f
 
 ********************
 
-Slayer:
+### Slayer:
 
 - This class should also have a ZombieCounter object to track the number of zombies. It has a constructor as follows:
 
@@ -43,6 +42,6 @@ The Slayer kills a zombie every 2ms (but must first check if there is a zombie) 
 
 ********************
 
-Simulator:
+### Simulator:
 
 - This class provides the main management of the project. The main method creates and starts n DoorMan threads (where n is taken as a command-line argument) and one Slayer thread. When all threads finish their work, the main thread checks whether 100 zombies have been killed or if the zombies have killed you, and prints the result to the screen.
