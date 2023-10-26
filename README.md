@@ -1,55 +1,48 @@
 # zombieSlayer
 
-Learning Objectives:
+## Learning Objectives:
 - Concurrency
 
-Bu proje, bir zombi istilasını temizlemek için çoklu iş parçacığı (thread) kullanarak bir simülasyon oluşturma üzerine odaklanmaktadır. Sadece bir silahınız olduğu için kendinizi ve birkaç arkadaşınızı, bir odada yer alan ve sokaka çıkan birden fazla kapıya sahip bir odayı güvence altına almaya çalışıyorsunuz.
+This project focuses on creating a simulation using multiple threads to clear a zombie invasion. You find yourself with just one weapon, trying to secure a room with multiple doors leading to the street, and you have a few friends with you.
 
-Zombiler yavaş hareket ettikleri için genel olarak onları kontrol etmek kolaydır. Arkadaşlarınızdan her biri bir kapıyı kontrol ederken, bireysel zombilere izin verir ve giren zombi sayısını takip eder. Siz ise odanın merkezinde durarak girmiş olan zombileri elimine etmeye çalışır ve öldürdüklerinizi sayarsınız.
+Zombies are generally easy to manage as they move slowly. Each of your friends is responsible for guarding one door, allowing individual zombies to enter and keeping track of the number of incoming zombies. Meanwhile, you stand in the center of the room, trying to eliminate the zombies that have entered and counting the ones you've killed.
 
-Açıkça çok fazla zombi istemiyorsunuz. Odada herhangi bir anda 100'den fazla zombi olması durumunda ölürsünüz. 100 zombiyi öldürebilirseniz güvende olursunuz. Bu hedefe ulaşmanın tek yolu, sadece sokaka açılan yeterli sayıda kapıya sahip bir oda bulmaktır.
+Clearly, you don't want too many zombies. If there are more than 100 zombies in the room at any given time, you'll die. If you manage to kill 100 zombies, you'll be safe. The only way to achieve this goal is to find a room with a sufficient number of doors leading to the street.
 
-Projenin amacı, ölden önce 100 zombiyi öldürebileceğiniz en yüksek kapı sayısını bulmak için kod yazmaktır.
+The project's purpose is to write code to find the maximum number of doors you can have to kill 100 zombies before you die.
 
-Kullanılan Sınıflar :
+## Used Classes:
 
+### ZombieCounter:
+This class has methods to keep track of the number of zombies in the room and the number of zombies killed. It includes the following methods:
+- zombieEntered(): Keeps track of the number of zombies entering the room.
+- zombieKilled(): Tracks the number of zombies killed.
+- tooManyZombiesInTheRoom(): Returns true if there are 100 or more zombies in the room.
+- killed100Zombies(): Returns true if more than 100 zombies have been killed.
+- zombiesExist(): Returns true if there is at least one zombie in the room.
+- getKilledCount(): Returns the number of zombies killed.
+- getInTheRoomCount(): Returns the number of zombies in the room.
 
-ZombieCounter:
---
-Bu sınıf, odadaki zombi sayısını ve öldürülen zombilerin sayısını takip etmek için yöntemlere sahiptir. Aşağıdaki yöntemleri içerir:
-
-    zombieEntered(): Odaya giren zombi sayısını takip eder.
-    zombieKilled(): Öldürülen zombi sayısını takip eder.
-    tooManyZombiesInTheRoom(): Odadaki zombi sayısı 100 veya daha fazla ise true döner.
-    killed100Zombies(): 100'den fazla zombi öldürüldüyse true döner.
-    zombiesExist(): Odada en az bir zombi varsa true döner.
-    getKilledCount(): Öldürülen zombi sayısını döner.
-    getInTheRoomCount(): Odadaki zombi sayısını döner.
-    
-******************
-
-DoorMan:
---
-Bu sınıf, zombi sayısını takip etmek için ZombieCounter nesnesine sahip olmalıdır. Aşağıdaki şekilde bir yapıcı metodu bulunur.
-
-java
-
+### DoorMan:
+This class should have a ZombieCounter object to track the number of zombies. It has a constructor as follows:
+```java
 public DoorMan(ZombieCounter zombieCounter) { }
 
-Her DoorMan iş parçacığı, her 2ms'de bir zombiyi içeri alır (ZombieCounter'dan ilgili yöntemi çağırarak) ve kabul edilen zombi sayısını takip eder. DoorMan iş parçacığı, odada çok fazla zombi (100'den fazla) olduğunda veya Slayer tarafından 100'den fazla zombi öldürüldüğünde sonlanır.
+
+Each DoorMan thread lets a zombie in every 2ms (by calling the relevant method from ZombieCounter) and keeps track of the accepted zombie count. The DoorMan thread terminates when there are too many zombies in the room (more than 100) or when Slayer has killed more than 100 zombies.
 
 ********************
 
 Slayer:
--
-Bu sınıf da zombi sayısını takip etmek için ZombieCounter nesnesine sahip olmalıdır. Aşağıdaki şekilde bir yapıcı metodu bulunur:
+
+- This class should also have a ZombieCounter object to track the number of zombies. It has a constructor as follows:
+
 
   public Slayer(ZombieCounter zombieCounter) { }
+The Slayer kills a zombie every 2ms (but must first check if there is a zombie) and keeps track of the number of zombies killed (by calling the relevant method from the ZombieCounter). The Slayer thread terminates when there are too many zombies in the room (more than 100) or when more than 100 zombies have been killed.
 
-Slayer her 2ms'de bir bir zombiyi öldürür (ancak önce zombi olup olmadığını kontrol etmelidir) ve öldürülen zombi sayısını takip eder (ZombieCounter nesnesinden ilgili yöntemi çağırarak). Slayer iş parçacığı, odada çok fazla zombi (100'den fazla) olduğunda veya 100'den fazla zombi öldürüldüğünde sonlanır.
-
-************
+********************
 
 Simulator:
---
-Bu sınıf, projenin ana yönetimini sağlar. main yöntemi, n DoorMan iş parçacıklarını (n komut satırı argümanı olarak alınır) ve bir Slayer iş parçacığını oluşturur ve başlatır. Tüm iş parçacıkları işlerini tamamladığında, ana iş parçacığı 100 zombi öldürüldü veya zombiler tarafından öldürüldüğünüzü kontrol eder ve ekrana yazdırır.
+
+- This class provides the main management of the project. The main method creates and starts n DoorMan threads (where n is taken as a command-line argument) and one Slayer thread. When all threads finish their work, the main thread checks whether 100 zombies have been killed or if the zombies have killed you, and prints the result to the screen.
