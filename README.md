@@ -25,7 +25,8 @@ This class has methods to keep track of the number of zombies in the room and th
 
 ### DoorMan:
 This class should have a ZombieCounter object to track the number of zombies. It has a constructor as follows:
-public DoorMan(ZombieCounter zombieCounter) { }
+
+```public DoorMan(ZombieCounter zombieCounter) { }```
 
 
 Each DoorMan thread lets a zombie in every 2ms (by calling the relevant method from ZombieCounter) and keeps track of the accepted zombie count. The DoorMan thread terminates when there are too many zombies in the room (more than 100) or when Slayer has killed more than 100 zombies.
@@ -35,9 +36,9 @@ Each DoorMan thread lets a zombie in every 2ms (by calling the relevant method f
 ### Slayer:
 
 - This class should also have a ZombieCounter object to track the number of zombies. It has a constructor as follows:
+  
+```public Slayer(ZombieCounter zombieCounter) { }```
 
-
-  public Slayer(ZombieCounter zombieCounter) { }
 The Slayer kills a zombie every 2ms (but must first check if there is a zombie) and keeps track of the number of zombies killed (by calling the relevant method from the ZombieCounter). The Slayer thread terminates when there are too many zombies in the room (more than 100) or when more than 100 zombies have been killed.
 
 ********************
